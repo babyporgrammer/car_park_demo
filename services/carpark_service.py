@@ -5,7 +5,7 @@ from diskcache import Cache
 from dotenv import load_dotenv
 import os
 load_dotenv()
-# 创建缓存目录
+# Initialize cache
 cache = Cache(directory=".carpark_cache")
 
 TFNSW_API_KEY = os.getenv("TFNSW_API_KEY")
@@ -19,6 +19,10 @@ headers = {
 
 
 async def fetch_facility_ids() -> List[str]:
+    """
+    get a list of all car park facility IDs.
+    :return: list of facility IDs as strings.
+    """
     if "facility_ids" in cache:
         print("Using cached facility IDs")
         return cache["facility_ids"]
@@ -38,6 +42,11 @@ async def fetch_facility_ids() -> List[str]:
 
 
 async def fetch_facility_detail(facility_id: str) -> Optional[Dict]:
+    """
+    get detailed information for a specific car park facility by its ID.
+    :param facility_id: int or str, the unique identifier for the car park facility.
+    :return: returns a dictionary with detailed information about the car park facility,
+    """
     key = f"facility:{facility_id}"
     if key in cache:
         #print(f"Using cached data for facility {facility_id}")
@@ -58,15 +67,15 @@ async def fetch_facility_detail(facility_id: str) -> Optional[Dict]:
 
 async def fetch_all_carparks() -> List[Dict]:
     """
-    获取所有设施的详细数据（包括经纬度、可用车位、名称等）
+    get detailed information for all car parks.
     """
     facility_ids = await fetch_facility_ids()
     print(f"Total facilities to fetch: {len(facility_ids)}")
 
-    # 并发请求详细信息
+
     tasks = [fetch_facility_detail(fid) for fid in facility_ids]
     results = await asyncio.gather(*tasks)
 
-    # 过滤掉失败或空的数据
+
     carparks = [r for r in results if r is not None]
     return carparks

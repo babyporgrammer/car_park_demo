@@ -2,7 +2,7 @@ from math import radians, cos, sin, asin, sqrt
 
 def haversine(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
     """
-    计算两个经纬度坐标之间的距离（单位：公里）
+    calculate the great-circle distance between two points on the Earth specified in decimal degrees.
     """
     R = 6371  # 地球半径（单位：km）
     dlat = radians(lat2 - lat1)

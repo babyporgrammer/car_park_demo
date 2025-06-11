@@ -78,3 +78,9 @@ pytest tests/
 - "Almost Full" threshold is 10% (adjustable in code)
 - No paging / fuzzy search for facility name; purely ID based
 - Lat/lng distance uses Haversine approximation
+
+## ✅ pytest Coverage
+- File_statements| missing | excluded| coverage
+- services/__init__.py | 0 | 0 | 0 | 100%
+- services/carpark_service.py | 51 | 1 | 0 | 98%
+- Total	51 | 1 | 0 | 98% |

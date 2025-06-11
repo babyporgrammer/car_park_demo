@@ -6,7 +6,7 @@ from utils.haversine import haversine
 from fastapi import HTTPException, Path
 from api.dependencies import verify_api_key
 from fastapi import Depends
-from utils.rate_limit import limiter           # 关键：引入全局 limiter
+from utils.rate_limit import limiter
 from slowapi.util import get_remote_address
 from fastapi import Request
 
@@ -21,7 +21,7 @@ async def ping(request: Request):
 
 
 @router.get("/nearby", response_model=List[CarParkSummary],dependencies=[Depends(verify_api_key)])
-@limiter.limit("30/minute")   # 限制每分钟30次请求
+@limiter.limit("30/minute")   # limit to 30 requests per minute
 async def get_nearby_carparks(
     request: Request,
     lat: float = Query(..., description="Your latitude"),
@@ -82,7 +82,7 @@ async def get_carpark_detail(request: Request,
         lng_cp = float(data["location"]["longitude"])
         updated = data.get("MessageDate")
 
-        # 状态判定
+        # Determine status based on availability
         if available == 0:
             status = "Full"
         elif total_spots > 0 and available / total_spots < 0.1:
